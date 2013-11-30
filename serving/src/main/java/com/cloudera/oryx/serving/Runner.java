@@ -60,12 +60,12 @@ import org.apache.catalina.connector.Connector;
 import org.apache.catalina.core.JasperListener;
 import org.apache.catalina.core.JreMemoryLeakPreventionListener;
 import org.apache.catalina.core.ThreadLocalLeakPreventionListener;
-import org.apache.catalina.deploy.ApplicationListener;
-import org.apache.catalina.deploy.ErrorPage;
-import org.apache.catalina.deploy.LoginConfig;
-import org.apache.catalina.deploy.SecurityCollection;
-import org.apache.catalina.deploy.SecurityConstraint;
 import org.apache.catalina.startup.Tomcat;
+import org.apache.tomcat.util.descriptor.web.ApplicationListener;
+import org.apache.tomcat.util.descriptor.web.ErrorPage;
+import org.apache.tomcat.util.descriptor.web.LoginConfig;
+import org.apache.tomcat.util.descriptor.web.SecurityCollection;
+import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -333,7 +333,7 @@ public final class Runner implements Callable<Object>, Closeable {
 
     if (needHTTPS || needAuthentication) {
 
-      SecurityCollection securityCollection = new SecurityCollection("Protected Resources");
+      SecurityCollection securityCollection = new SecurityCollection();
       securityCollection.addPattern("/*");
       SecurityConstraint securityConstraint = new SecurityConstraint();
       securityConstraint.addCollection(securityCollection);
