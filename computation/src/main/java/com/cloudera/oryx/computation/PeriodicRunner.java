@@ -241,7 +241,7 @@ public final class PeriodicRunner implements Runnable, Closeable {
     }
     Store store = Store.get();
     for (CharSequence recentGenerationPathString : mostRecentGenerations) {
-      long generationID = StoreUtils.parseGenerationFromPrefix(recentGenerationPathString);
+      int generationID = StoreUtils.parseGenerationFromPrefix(recentGenerationPathString);
       if (store.exists(Namespaces.getGenerationDoneKey(instanceDir, generationID), true)) {
         return true;
       }
@@ -253,7 +253,7 @@ public final class PeriodicRunner implements Runnable, Closeable {
     if (mostRecentGenerations.isEmpty()) {
       return 0;
     }
-    long currentGenerationID =
+    int currentGenerationID =
         StoreUtils.parseGenerationFromPrefix(mostRecentGenerations.get(mostRecentGenerations.size() - 1));
     String inboundPrefix =
         Namespaces.getInstanceGenerationPrefix(config.getString("model.instance-dir"), currentGenerationID) +
@@ -274,11 +274,11 @@ public final class PeriodicRunner implements Runnable, Closeable {
                                config.getString("model.type"));
     Config config = ConfigUtils.getDefaultConfig();
     boolean localComputation;
-    if (config.hasPath("model.local-computation")) {
-      localComputation = config.getBoolean("model.local-computation");
-    } else {
-      log.warn("model.local is deprecated; use model.local-data and model.local-computation");
+    if (config.hasPath("model.local")) {
+      log.warn("model.local is deprecated; use model.local-computation");
       localComputation = config.getBoolean("model.local");
+    } else {
+      localComputation = config.getBoolean("model.local-computation");
     }
     Class<? extends GenerationRunner> runnerClass =
         localComputation ? localDistributed.get(0) : localDistributed.get(1);

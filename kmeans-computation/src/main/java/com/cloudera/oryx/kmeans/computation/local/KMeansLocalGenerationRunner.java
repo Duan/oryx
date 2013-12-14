@@ -43,7 +43,7 @@ public final class KMeansLocalGenerationRunner extends LocalGenerationRunner {
   @Override
   protected void runSteps() throws IOException, InterruptedException, JobException {
     String instanceDir = getInstanceDir();
-    long generationID = getGenerationID();
+    int generationID = getGenerationID();
     String generationPrefix = Namespaces.getInstanceGenerationPrefix(instanceDir, generationID);
 
     File currentInboundDir = Files.createTempDir();
@@ -55,6 +55,10 @@ public final class KMeansLocalGenerationRunner extends LocalGenerationRunner {
       Store store = Store.get();
       store.downloadDirectory(generationPrefix + "inbound/", currentInboundDir);
       Summary summary = new Summarize(currentInboundDir).call();
+      if (summary == null) {
+        // No summary created, bail out.
+        return;
+      }
       List<List<RealVector>> foldVecs = new Standarize(currentInboundDir, summary).call();
       List<List<WeightedRealVector>> weighted = new WeightedPointsByFold(foldVecs).call();
       List<KMeansEvaluationData> evalData = new ClusteringEvaluation(weighted).call();

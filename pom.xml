@@ -319,6 +319,10 @@
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
           </exclusion>
+          <exclusion>
+            <groupId>com.twitter</groupId>
+            <artifactId>parquet-avro</artifactId>
+          </exclusion>
         </exclusions>
       </dependency>
 
@@ -361,7 +365,7 @@
     <tomcat.version>8.0.0-RC5</tomcat.version>
     <!-- Don't update to 1.7.5+ until Hadoop uses Jackson 1.9+ -->
     <avro.version>1.7.4</avro.version>
-    <hadoop.version>2.0.0-cdh4.4.0</hadoop.version>
+    <hadoop.version>2.0.0-cdh4.5.0</hadoop.version>
     <!-- our custom props -->
     <module.jspx.package>override-me</module.jspx.package>
   </properties>
