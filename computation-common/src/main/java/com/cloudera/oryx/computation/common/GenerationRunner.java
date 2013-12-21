@@ -238,6 +238,7 @@ public abstract class GenerationRunner implements Callable<Object> {
       log.info("Dumping some stats on generation {}", generationID);
       endSize = store.getSizeRecursive(Namespaces.getInstanceGenerationPrefix(instanceDir, generationID));
       dumpStats();
+      log.info("Generation {} complete", generationID);
     }
   }
 
@@ -357,14 +358,8 @@ public abstract class GenerationRunner implements Callable<Object> {
   }
 
   private boolean isAnyInputInGeneration(int generationID) throws IOException {
-    Store store = Store.get();
-    for (String filePrefix :
-         store.list(Namespaces.getInstanceGenerationPrefix(instanceDir, generationID) + "inbound/", true)) {
-      if (store.getSize(filePrefix) > 0) {
-        return true;
-      }
-    }
-    return false;
+    String inboundPrefix = Namespaces.getInstanceGenerationPrefix(instanceDir, generationID) + "inbound/";
+    return Store.get().getSizeRecursive(inboundPrefix) > 0;
   }
 
   protected final int readLatestIterationInProgress() throws IOException {
